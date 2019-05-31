@@ -20,7 +20,7 @@ from keras.utils import to_categorical
 from seqeval.metrics import classification_report
 from seqeval.metrics.sequence_labeling import get_entities
 
-import kashgari.macros as k
+from kashgari import macros as k
 from kashgari.utils import helper
 from kashgari.type_hints import *
 
