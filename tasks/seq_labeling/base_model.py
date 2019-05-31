@@ -20,13 +20,13 @@ from keras.utils import to_categorical
 from seqeval.metrics import classification_report
 from seqeval.metrics.sequence_labeling import get_entities
 
-from kashgari import macros as k
+import kashgari.macros as k
 from kashgari.utils import helper
 from kashgari.type_hints import *
 
 from kashgari.tasks.base import BaseModel
 from kashgari.embeddings import BaseEmbedding
-
+from itertools import chain
 
 class SequenceLabelingModel(BaseModel):
 
@@ -327,6 +327,20 @@ class SequenceLabelingModel(BaseModel):
                                           padding='post', truncating='post')
         y_true = self.convert_idx_to_labels(padded_y, seq_length)
         y_pred = self.predict(x_data, batch_size=batch_size)
+
+        y_pred_tags=list(chain.from_iterable(y_pred))
+        print("y_pred_tags before",list(set(y_pred_tags)))
+        counter=0
+        list_tags=['O', 'B-PERS', 'B-LOC', 'I-MISC', 'B-MISC', 'I-ORG', 'I-LOC', 'I-PERS', 'B-ORG']
+        for i in range(len(y_pred)):
+            for j in range(len(y_pred[i])):
+                if(not (y_pred[i][j] in list_tags)):
+                    y_pred[i][j]="O"
+                    counter+=1
+        print("counter is",counter)
+        y_pred_tags=list(chain.from_iterable(y_pred))
+        print("y_pred_tags after",list(set(y_pred_tags)))
+
         if debug_info:
             for index in random.sample(list(range(len(x_data))), 5):
                 logging.debug('------ sample {} ------'.format(index))
