@@ -74,11 +74,12 @@ class SequenceLabelingModel(BaseModel):
                 if y not in label_set:
                     label_set.append(y)
 
-        label2idx = {
-            k.PAD: 0,
-            k.BOS: 1,
-            k.EOS: 2
-        }
+        # label2idx = {
+        #     k.PAD: 0,
+        #     k.BOS: 1,
+        #     k.EOS: 2
+        # }
+        label2idx = {}
         label_set = [i for i in label_set if i not in label2idx]
         for label in label_set:
             label2idx[label] = len(label2idx)

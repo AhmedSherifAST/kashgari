@@ -23,7 +23,7 @@ class BLSTMCRFModel(SequenceLabelingModel):
     __architect_name__ = 'BLSTMCRFModel'
     __base_hyper_parameters__ = {
         'lstm_layer': {
-            'units': 1024,
+            'units': 512,
             'return_sequences': True
         },
         'dense_layer': {
@@ -37,7 +37,7 @@ class BLSTMCRFModel(SequenceLabelingModel):
         base_model = self.embedding.model
         blstm_layer = Bidirectional(LSTM(**self.hyper_parameters['lstm_layer']))(base_model.output)
         blstm_layer = Bidirectional(LSTM(**self.hyper_parameters['lstm_layer']))(blstm_layer)
-        dense_layer = Dense(1024, activation='tanh')(blstm_layer)
+        dense_layer = Dense(100, activation='tanh')(blstm_layer)
         crf = CRF(len(self.label2idx), sparse_target=False)
         crf_layer = crf(dense_layer)
         model = Model(base_model.inputs, crf_layer)
